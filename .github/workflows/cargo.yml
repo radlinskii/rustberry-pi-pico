@@ -17,8 +17,6 @@ jobs:
             - uses: actions/checkout@v3
             - name: add thumbv6m-none-eabi target
               run: rustup target add thumbv6m-none-eabi
-            - name: install elf2uf2-rs
-              run: cargo install elf2uf2-rs
             - name: Build
               run: cargo build --verbose
             - name: Run tests
