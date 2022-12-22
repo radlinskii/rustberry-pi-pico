@@ -23,7 +23,7 @@ Then, you will need a tool that converts **Rust** compilation output into a bina
 cargo install elf2uf2-rs
 ```
 
-### Installing
+### Installation
 
 Clone this repo with:
 ```sh
