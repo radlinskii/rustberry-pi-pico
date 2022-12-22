@@ -4,14 +4,14 @@ This repo contains various programs I implemented in my new favourite programmin
 
 ## Description
 
-The ultimate goal for this repo is to implement a keyboard firmware in **Rust** and run it on _Raspberry Pi Pico_,<br/>
-but as I need to learn working with **embedded rust** first, I decided to put any projects I run on my **Pico** as a separate _binary crate_ in `src/binary`. Those programs will probably include experimenting with different features of the **Pico**.
+The ultimate goal for this repo is to implement a keyboard firmware in **Rust** and run it on **Raspberry Pi Pico**,<br/>
+but as I need to learn working with **embedded rust** first, I decided to put any projects I run on my **Pico** as a separate binary crate in `src/binary`. Those programs will probably include experimenting with different features of the **Pico**.
 
 ## Getting Started
 
 ### Prerequisites
 
-First of all, you need a [Raspberry Pi Pico](https://www.raspberrypi.com/products/raspberry-pi-pico/) board, along with soldering tools and whatever addtional hardware you would like to work with the **Pico** board.
+First of all, you need a [Raspberry Pi Pico](https://www.raspberrypi.com/products/raspberry-pi-pico/) board, along with soldering tools and whatever additional hardware you would like to work with the **Pico** board.
 
 You need to have [Rust](https://www.rust-lang.org/tools/install) installed on your machine.
 Once you do, you need to add correct build target to your **Rust** environment:
