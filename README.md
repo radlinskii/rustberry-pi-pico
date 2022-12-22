@@ -9,7 +9,7 @@ but as I need to learn working with **embedded rust** first, I decided to put an
 
 ## Getting Started
 
-### Dependencies
+### Prerequisites
 
 First of all, you need a [Raspberry Pi Pico](https://www.raspberrypi.com/products/raspberry-pi-pico/) board, along with soldering tools and whatever addtional hardware you would like to work with the **Pico** board.
 
