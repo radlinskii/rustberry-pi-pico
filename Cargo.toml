@@ -6,7 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-# blinky
+# blink on-board led
 embedded-hal = "0.2.7"
 rp-pico = "0.6.0"
 cortex-m = "0.7.6"

@@ -37,7 +37,7 @@ git clone https://github.com/radlinskii/rustberry-pi-pico.git
 Then to try to compile one of the programs from `src/bin` directory, e.g.:
 
 ```sh
-cargo build --release --bin blinky
+cargo build --release --bin blink-on-board-led
 ```
 
 If it compiles you are good to go.
@@ -50,7 +50,7 @@ This will put your Raspberry Pi Pico into USB mass storage device mode so will b
 Next you can install new firmware on your board to do that simply run one of the programs from `src/bin` folder with `cargo run`, e.g.:
 
 ```sh
-cargo run --release --bin --blinky
+cargo run --release --bin --blink-on-board-led
 ```
 
 That's it, in case of the example above you should see that the LED that is preinstalled on your board starts blinking.
