@@ -1,4 +1,4 @@
-//! # Pico Light LED On Key Press Example
+//! # Pico Light Outer LED On Key Press Example
 //!
 //! Lights the LED attached to the Pico board when key is pressed.
 //!
