@@ -5,7 +5,7 @@ This repo contains various programs I implemented in my new favourite programmin
 ## Description
 
 The ultimate goal for this repo is to implement a keyboard firmware in **Rust** and run it on **Raspberry Pi Pico**,<br/>
-but as I need to learn working with **embedded rust** first, I decided to put any projects I run on my **Pico** as a separate binary crate in `src/binary`. Those programs will probably include experimenting with different features of the **Pico**.
+but as I need to learn working with **embedded rust** first, I decided to put any projects I run on my **Pico** as a separate example crate in `src/examples/{example-name}/example.rs`. Those programs will probably include experimenting with different features of the **Pico**.
 
 ## Getting Started
 
@@ -34,10 +34,10 @@ Clone this repo with:
 git clone https://github.com/radlinskii/rustberry-pi-pico.git
 ```
 
-Then to try to compile one of the programs from `src/bin` directory, e.g.:
+Then to try to compile one of the programs from `src/examples` directory, e.g.:
 
 ```sh
-cargo build --release --bin blink-on-board-led
+cargo build --release --example blink-on-board-led
 ```
 
 If it compiles you are good to go.
@@ -47,10 +47,10 @@ If it compiles you are good to go.
 To install chosen firmware to your **Pico** first you need to connect the board to your computer with USB cable while pressing the `BOOTSEL` button on the board.<br/>
 This will put your Raspberry Pi Pico into USB mass storage device mode so will be ready to receive new firmware.
 
-Next you can install new firmware on your board to do that simply run one of the programs from `src/bin` folder with `cargo run`, e.g.:
+Next you can install new firmware on your board to do that simply run one of the programs from `src/examples` folder with `cargo run`, e.g.:
 
 ```sh
-cargo run --release --bin --blink-on-board-led
+cargo run --release --example --blink-on-board-led
 ```
 
 That's it, in case of the example above you should see that the LED that is preinstalled on your board starts blinking.
@@ -75,4 +75,4 @@ This project is licensed under the MIT License - see the `license` file for deta
 
 ## Acknowledgments
 
-Binaries I create, at least at the very beginning, will be inspired by `examples` directory from awesome [rp-hal-boards](https://github.com/rp-rs/rp-hal-boards/tree/main/boards/rp-pico) repo.
+Programs I create, at least at the very beginning, will be inspired by `examples` directory from the awesome [rp-hal-boards](https://github.com/rp-rs/rp-hal-boards/tree/main/boards/rp-pico) repo.

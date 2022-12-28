@@ -17,3 +17,24 @@ cortex-m-rt = "0.7.2"
 usb-device = "0.2.9"
 usbd-serial = "0.1.1"
 heapless = "0.7.16"
+
+
+[[example]]
+name = "blink-on-board-led"
+path = "src/examples/blink-on-board-led/example.rs"
+
+[[example]]
+name = "blink-outer-led"
+path = "src/examples/blink-outer-led/example.rs"
+
+[[example]]
+name = "light-on-board-led-on-key-press"
+path = "src/examples/light-on-board-led-on-key-press/example.rs"
+
+[[example]]
+name = "light-outer-led-on-key-press"
+path = "src/examples/light-outer-led-on-key-press/example.rs"
+
+[[example]]
+name = "usb-serial-communicator"
+path = "src/examples/usb-serial-communicator/example.rs"
