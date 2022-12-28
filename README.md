@@ -50,7 +50,7 @@ This will put your Raspberry Pi Pico into USB mass storage device mode so will b
 Next you can install new firmware on your board to do that simply run one of the programs from `src/examples` folder with `cargo run`, e.g.:
 
 ```sh
-cargo run --release --examples --blink-on-board-led
+cargo run --release --example --blink-on-board-led
 ```
 
 That's it, in case of the example above you should see that the LED that is preinstalled on your board starts blinking.
