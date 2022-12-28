@@ -43,3 +43,7 @@ path = "src/examples/light-outer-led-on-key-press/example.rs"
 [[example]]
 name = "usb-serial-communicator"
 path = "src/examples/usb-serial-communicator/example.rs"
+
+[[example]]
+name = "rtic"
+path = "src/examples/rtic/example.rs"
