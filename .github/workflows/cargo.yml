@@ -1,4 +1,4 @@
-name: cargo build
+name: check and build
 
 on:
     push:
@@ -17,5 +17,9 @@ jobs:
             - uses: actions/checkout@v3
             - name: add thumbv6m-none-eabi target
               run: rustup target add thumbv6m-none-eabi
-            - name: Build
-              run: cargo build --verbose
+            - name: Check formatting
+              run: cargo fmt --check
+            - name: Check examples
+              run: cargo check --examples
+            - name: Build examples
+              run: cargo build --examples
