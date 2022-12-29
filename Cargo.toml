@@ -45,5 +45,9 @@ name = "usb-serial-communicator"
 path = "src/examples/usb-serial-communicator/example.rs"
 
 [[example]]
-name = "rtic"
-path = "src/examples/rtic/example.rs"
+name = "rtic-blink-on-board-led"
+path = "src/examples/rtic-blink-on-board-led/example.rs"
+
+[[example]]
+name = "rtic-blink-outer-led"
+path = "src/examples/rtic-blink-outer-led/example.rs"
