@@ -1,9 +1,9 @@
-//! # Pico Light On-board LED On Key Press Example
+//! # Light Outer LED On Key Press Example
 //!
 //! Lights the LED attached to the Pico board when key is pressed.
 //!
-//! This will light up an on-board LED
-//! when key attached to GPIO13 closes the circuit with the GND.
+//! This will light up an LED attached to GPIO15
+//! when keyboard switch attached to GPIO13 closes the circuit with GPIO14.
 
 #![no_std]
 #![no_main]
