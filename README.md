@@ -47,27 +47,14 @@ If it compiles you are good to go.
 To install chosen firmware to your **Pico** first you need to connect the board to your computer with USB cable while pressing the `BOOTSEL` button on the board.<br/>
 This will put your Raspberry Pi Pico into USB mass storage device mode so will be ready to receive new firmware.
 
-Next you can install new firmware on your board to do that simply run one of the programs from `src/examples` folder with `cargo run`, e.g.:
+Next you can install new firmware on your board.
+To do that simply run one of the programs from `src/examples` folder with `cargo run`, e.g.:
 
 ```sh
 cargo run --release --example --blink-on-board-led
 ```
 
 That's it, in case of the example above you should see that the LED that is preinstalled on your board starts blinking.
-
-#### Connecting to serial port on MacOS
-
-To list available serial ports run:
-
-```sh
-ls /dev/tty.*
-```
-
-Then, when you see the port you are looking for you can connect to it via `screen` command, e.g.:
-
-```sh
-screen /dev/tty.usbmodemTEST1
-```
 
 ## License
 
