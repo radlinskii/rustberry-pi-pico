@@ -51,3 +51,8 @@ path = "src/examples/rtic-blink-on-board-led/example.rs"
 [[example]]
 name = "rtic-blink-outer-led"
 path = "src/examples/rtic-blink-outer-led/example.rs"
+
+[[example]]
+name = "light-on-board-led-on-gpio-key-press"
+path = "src/examples/light-on-board-led-on-gpio-key-press/example.rs"
+
