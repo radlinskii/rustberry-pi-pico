@@ -3,6 +3,12 @@
 version = 3
 
 [[package]]
+name = "arraydeque"
+version = "0.4.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f0ffd3d69bd89910509a5d31d1f1353f38ccffdd116dd0099bbd6627f7bd8ad8"
+
+[[package]]
 name = "arrayvec"
 version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -207,6 +213,29 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b0fd2260e829bddf4cb6ea802289de2f86d6a7a690192fbe91b3f46e0f2c8473"
 dependencies = [
  "either",
+]
+
+[[package]]
+name = "keyberon"
+version = "0.2.0"
+source = "git+https://github.com/TeXitoi/keyberon#1fe47e8382e1240323593845f7d7ca552751657f"
+dependencies = [
+ "arraydeque",
+ "either",
+ "embedded-hal",
+ "heapless",
+ "keyberon-macros",
+ "usb-device",
+]
+
+[[package]]
+name = "keyberon-macros"
+version = "0.1.0"
+source = "git+https://github.com/TeXitoi/keyberon#1fe47e8382e1240323593845f7d7ca552751657f"
+dependencies = [
+ "proc-macro-error",
+ "proc-macro2",
+ "quote",
 ]
 
 [[package]]
@@ -427,8 +456,10 @@ dependencies = [
  "embedded-hal",
  "fugit",
  "heapless",
+ "keyberon",
  "panic-halt",
  "rp-pico",
+ "rp2040-hal",
  "usb-device",
  "usbd-serial",
 ]
