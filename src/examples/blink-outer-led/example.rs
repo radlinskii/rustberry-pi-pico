@@ -86,5 +86,3 @@ fn main() -> ! {
         delay.delay_ms(1000);
     }
 }
-
-// End of file
