@@ -75,3 +75,7 @@ path = "src/examples/keyberon-one-key-keyboard/example.rs"
 [[example]]
 name = "rtic-software-task"
 path = "src/examples/rtic-software-task/example.rs"
+
+[[example]]
+name = "keyberon-one-encoder-keyboard"
+path = "src/examples/keyberon-one-encoder-keyboard/example.rs"
