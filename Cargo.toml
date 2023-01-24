@@ -64,5 +64,9 @@ name = "light-outer-led-on-gpio-key-press"
 path = "src/examples/light-outer-led-on-gpio-key-press/example.rs"
 
 [[example]]
+name = "toggle-on-board-led-on-gpio-key-press"
+path = "src/examples/toggle-on-board-led-on-gpio-key-press/example.rs"
+
+[[example]]
 name = "keyberon-one-key-keyboard"
 path = "src/examples/keyberon-one-key-keyboard/example.rs"
