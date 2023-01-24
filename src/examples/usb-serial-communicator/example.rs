@@ -152,5 +152,3 @@ fn main() -> ! {
         }
     }
 }
-
-// End of file
