@@ -4,24 +4,27 @@
 #![no_std]
 #![no_main]
 
-mod encoder;
-
 use panic_halt as _;
 
 #[rtic::app(device = rp_pico::hal::pac, peripherals = true, dispatchers = [PIO0_IRQ_0])]
 mod app {
-    use crate::encoder::Encoder;
     use cortex_m::prelude::_embedded_hal_watchdog_Watchdog;
     use cortex_m::prelude::_embedded_hal_watchdog_WatchdogEnable;
     use embedded_hal::digital::v2::OutputPin;
+    use hal::gpio::bank0::Gpio25;
+    use hal::gpio::bank0::Gpio8;
+    use hal::gpio::bank0::Gpio9;
+    use hal::gpio::PullUpInput;
+    use hal::gpio::PushPullOutput;
     use keyberon::debounce::Debouncer;
     use keyberon::key_code;
-    use keyberon::layout::{self, Layout};
+    use keyberon::layout::{Event, Layout};
     use keyberon::matrix::Matrix;
+    use rotary_encoder_hal::{Direction, Rotary};
     use rp_pico::{
         hal::{
-            self, clocks::init_clocks_and_plls, gpio::DynPin, sio::Sio, timer::Alarm, usb::UsbBus,
-            watchdog::Watchdog,
+            self, clocks::init_clocks_and_plls, gpio::DynPin, gpio::Pin, sio::Sio, timer::Alarm,
+            usb::UsbBus, watchdog::Watchdog,
         },
         XOSC_CRYSTAL_FREQ,
     };
@@ -36,14 +39,9 @@ mod app {
 
     pub static LAYERS: keyberon::layout::Layers<3, 1, 1> = keyberon::layout::layout! {
         {
-            [
-                A B C
-            ]
+            [A B C],
         }
     };
-
-    pub const ENCODER_LEFT: (u8, u8) = (0, 1);
-    pub const ENCODER_RIGHT: (u8, u8) = (0, 2);
 
     #[shared]
     struct Shared {
@@ -54,15 +52,17 @@ mod app {
             keyberon::keyboard::Keyboard<()>,
         >,
         layout: Layout<3, 1, 1>,
-        encoder: Encoder,
+        encoder: Rotary<Pin<Gpio8, PullUpInput>, Pin<Gpio9, PullUpInput>>,
+        led: Pin<Gpio25, PushPullOutput>,
     }
 
     #[local]
     struct Local {
         watchdog: hal::watchdog::Watchdog,
-        matrix: Matrix<DynPin, DynPin, 1, 1>,
-        debouncer: Debouncer<[[bool; 1]; 1]>,
+        matrix: Matrix<DynPin, DynPin, 3, 1>,
+        debouncer: Debouncer<[[bool; 3]; 1]>,
         alarm: hal::timer::Alarm0,
+        resolution_count: u8,
     }
 
     #[init]
@@ -94,26 +94,31 @@ mod app {
             &mut resets,
         );
 
-        let mut led = pins.gpio25.into_push_pull_output();
-        led.set_high().unwrap();
+        let led = pins.gpio25.into_push_pull_output();
 
         // delay for power on
         for _ in 0..1000 {
             cortex_m::asm::nop();
         }
 
-        let matrix: Matrix<DynPin, DynPin, 1, 1> = Matrix::new(
-            [pins.gpio13.into_pull_up_input().into()],
+        let matrix: Matrix<DynPin, DynPin, 3, 1> = Matrix::new(
+            [
+                pins.gpio13.into_pull_up_input().into(),
+                // those two pins below are not actually connected
+                // they are used only to make the matrix type be 3x1
+                pins.gpio15.into_pull_up_input().into(),
+                pins.gpio16.into_pull_up_input().into(),
+            ],
             [pins.gpio14.into_push_pull_output().into()],
         )
         .unwrap();
 
         let layout = Layout::new(&LAYERS);
-        let debouncer = Debouncer::new([[false; 1]; 1], [[false; 1]; 1], 20);
+        let debouncer = Debouncer::new([[false; 3]; 1], [[false; 3]; 1], 10);
 
         let encoder_a = pins.gpio8.into_pull_up_input();
         let encoder_b = pins.gpio9.into_pull_up_input();
-        let encoder = Encoder::new(encoder_a, encoder_b, ENCODER_LEFT, ENCODER_RIGHT);
+        let encoder = Rotary::new(encoder_a, encoder_b);
 
         let mut timer = hal::Timer::new(c.device.TIMER, &mut resets);
         let mut alarm = timer.alarm_0().unwrap();
@@ -136,18 +141,22 @@ mod app {
         // Start watchdog and feed it with the lowest priority task at 1000hz
         watchdog.start(MicrosDurationU32::micros(10000));
 
+        let resolution_count: u8 = 0;
+
         (
             Shared {
                 usb_dev,
                 usb_class,
                 layout,
                 encoder,
+                led,
             },
             Local {
                 alarm,
                 watchdog,
                 matrix,
                 debouncer,
+                resolution_count,
             },
             init::Monotonics(),
         )
@@ -166,8 +175,8 @@ mod app {
         });
     }
 
-    #[task(priority = 2, capacity = 8, shared = [usb_dev, usb_class, layout])]
-    fn handle_event(mut c: handle_event::Context, event: Option<layout::Event>) {
+    #[task(priority = 2, capacity = 8, shared = [usb_dev, usb_class, layout, encoder])]
+    fn handle_event(mut c: handle_event::Context, event: Option<Event>) {
         match event {
             None => (),
             Some(e) => {
@@ -193,8 +202,8 @@ mod app {
     #[task(
         binds = TIMER_IRQ_0,
         priority = 1,
-        shared=[encoder],
-        local = [matrix, debouncer, watchdog, alarm],
+        shared=[encoder, layout, led],
+        local = [matrix, debouncer, watchdog, alarm, resolution_count],
     )]
     fn scan_timer_irq(mut c: scan_timer_irq::Context) {
         let alarm = c.local.alarm;
@@ -203,18 +212,42 @@ mod app {
 
         c.local.watchdog.feed();
         let keys_pressed = c.local.matrix.get().unwrap();
+
         let deb_events = c.local.debouncer.events(keys_pressed);
 
         for event in deb_events {
             handle_event::spawn(Some(event)).unwrap();
         }
 
-        c.shared.encoder.lock(|e| {
-            if let Some(events) = e.read_events() {
-                for event in events {
-                    handle_event::spawn(Some(event)).unwrap();
+        // Read the encoder pins through an update()
+        // Then if 4 increments have occurred (one physical click),
+        // press and release the "buttons" in the layout
+        c.shared.encoder.lock(|e| match e.update().unwrap() {
+            Direction::Clockwise => {
+                if *c.local.resolution_count == 3 {
+                    handle_event::spawn(Some(Event::Press(1, 0))).unwrap();
+                    handle_event::spawn(Some(Event::Release(1, 0))).unwrap();
+
+                    c.shared.led.lock(|l| l.set_high().unwrap());
+
+                    *c.local.resolution_count = 0;
+                } else {
+                    *c.local.resolution_count += 1;
                 }
             }
+            Direction::CounterClockwise => {
+                if *c.local.resolution_count == 3 {
+                    handle_event::spawn(Some(Event::Press(2, 0))).unwrap();
+                    handle_event::spawn(Some(Event::Release(2, 0))).unwrap();
+
+                    c.shared.led.lock(|l| l.set_low().unwrap());
+
+                    *c.local.resolution_count = 0;
+                } else {
+                    *c.local.resolution_count += 1;
+                }
+            }
+            Direction::None => {}
         });
 
         handle_event::spawn(None).unwrap();

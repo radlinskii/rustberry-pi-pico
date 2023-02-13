@@ -27,6 +27,7 @@ fugit = "0.3.6"
 keyberon = { git = "https://github.com/TeXitoi/keyberon" }
 rp2040-hal = "0.7.0"
 rp2040-monotonic = "1.2.0"
+rotary-encoder-hal = "0.5.0"
 
 [[example]]
 name = "blink-on-board-led"
