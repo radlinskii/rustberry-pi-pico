@@ -71,3 +71,7 @@ path = "src/examples/toggle-on-board-led-on-gpio-key-press/example.rs"
 [[example]]
 name = "keyberon-one-key-keyboard"
 path = "src/examples/keyberon-one-key-keyboard/example.rs"
+
+[[example]]
+name = "rtic-software-task"
+path = "src/examples/rtic-software-task/example.rs"
