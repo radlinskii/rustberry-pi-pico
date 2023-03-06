@@ -412,6 +412,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "rp2040-monotonic"
+version = "1.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c30fa31d4952d2af0ee0b4962ef914988413f8092827fffc2fda03145aae752f"
+dependencies = [
+ "fugit",
+ "rp2040-pac",
+ "rtic-monotonic",
+]
+
+[[package]]
 name = "rp2040-pac"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -460,6 +471,7 @@ dependencies = [
  "panic-halt",
  "rp-pico",
  "rp2040-hal",
+ "rp2040-monotonic",
  "usb-device",
  "usbd-serial",
 ]
