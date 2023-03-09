@@ -1,4 +1,4 @@
-//! # Blink On-board LED using RTIC Software Task
+//! # Blink On-board LED using RTIC Software Task with debug messages.
 //!
 //! Blinks the LED on a Pico board.
 //!

@@ -1,0 +1,13 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "cargo",
+            "command": "build",
+            "args": ["--example", "picoprobe-debugging"],
+            "problemMatcher": ["$rustc"],
+            "group": "build",
+            "label": "rust: cargo build2"
+        }
+    ]
+}

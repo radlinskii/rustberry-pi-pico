@@ -81,5 +81,5 @@ name = "rtic-software-task"
 path = "src/examples/rtic-software-task/example.rs"
 
 [[example]]
-name = "picoprobe-logging"
-path = "src/examples/picoprobe-logging/example.rs"
+name = "picoprobe-debugging"
+path = "src/examples/picoprobe-debugging/example.rs"
