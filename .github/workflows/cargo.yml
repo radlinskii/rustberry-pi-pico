@@ -17,6 +17,8 @@ jobs:
             - uses: actions/checkout@v3
             - name: add thumbv6m-none-eabi target
               run: rustup target add thumbv6m-none-eabi
+            - name: install deps
+              run: cargo install flip-link
             - name: Check formatting
               run: cargo fmt --check
             - name: Check examples
