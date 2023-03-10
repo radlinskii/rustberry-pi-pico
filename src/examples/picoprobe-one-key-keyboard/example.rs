@@ -15,6 +15,7 @@ use panic_probe as _;
 mod app {
     use defmt::*;
     use defmt_rtt as _;
+    use embedded_hal::digital::v2::OutputPin;
     use rp_pico::{
         hal::{clocks, gpio::DynPin, sio::Sio, usb::UsbBus, watchdog::Watchdog},
         XOSC_CRYSTAL_FREQ,
@@ -81,6 +82,7 @@ mod app {
             sio.gpio_bank0,
             &mut resets,
         );
+        pins.led.into_push_pull_output().set_high().unwrap();
 
         let usb_bus = UsbBusAllocator::new(UsbBus::new(
             ctx.device.USBCTRL_REGS,
