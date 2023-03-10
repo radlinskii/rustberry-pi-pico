@@ -83,3 +83,7 @@ path = "src/examples/rtic-software-task/example.rs"
 [[example]]
 name = "picoprobe-debugging"
 path = "src/examples/picoprobe-debugging/example.rs"
+
+[[example]]
+name = "picoprobe-one-key-keyboard"
+path = "src/examples/picoprobe-one-key-keyboard/example.rs"
