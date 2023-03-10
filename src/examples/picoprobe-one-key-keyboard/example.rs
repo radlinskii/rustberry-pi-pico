@@ -1,11 +1,7 @@
-//! # Blink On-board LED using RTIC Software Task with debug messages.
+//! # PicoProbe One Key Keyboard Example
 //!
-//! Blinks the LED on a Pico board.
-//!
-//! This will blink an LED attached to GP25, which is the pin the Pico uses for
-//! the on-board LED. It also uses `defmt` to send log messages to the host.
-//! Should be run with `probe-run` runner, see `.cargo/config.toml` file.
-
+//! This example is a port of the keyberon-one-key-keyboard, but is using `picoprobe` for logging and debugging.
+//! It also handles interrupts differently, using software interrupts.
 #![no_std]
 #![no_main]
 
@@ -14,7 +10,7 @@ use panic_probe as _;
 #[rtic::app(
     device = rp_pico::hal::pac,
     peripherals = true,
-    dispatchers = [SW0_IRQ]
+    dispatchers = [SW0_IRQ, SW1_IRQ]
 )]
 mod app {
     use defmt::*;
@@ -108,6 +104,8 @@ mod app {
         let layout = Layout::new(&LAYERS);
         let debouncer = Debouncer::new([[false; 1]; 1], [[false; 1]; 1], 20);
 
+        scan_timer_irq::spawn().unwrap();
+
         (
             Shared {
                 usb_dev,
@@ -148,16 +146,17 @@ mod app {
             .usb_class
             .lock(|k| k.device_mut().set_keyboard_report(report.clone()))
         {
+            // info!("not ready");
             return;
         }
         if c.shared.usb_dev.lock(|d| d.state()) != UsbDeviceState::Configured {
+            info!("not configured");
             return;
         }
         while let Ok(0) = c.shared.usb_class.lock(|k| k.write(report.as_bytes())) {}
     }
 
     #[task(
-        binds = TIMER_IRQ_0,
         priority = 1,
         local = [matrix, debouncer],
     )]
@@ -166,8 +165,10 @@ mod app {
         let deb_events = c.local.debouncer.events(keys_pressed);
 
         for event in deb_events {
+            info!("event");
             handle_event::spawn(Some(event)).unwrap();
         }
         handle_event::spawn(None).unwrap();
+        scan_timer_irq::spawn().unwrap();
     }
 }
