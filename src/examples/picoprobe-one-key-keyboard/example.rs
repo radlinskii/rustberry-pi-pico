@@ -1,7 +1,9 @@
 //! # PicoProbe One Key Keyboard Example
 //!
-//! This example is a port of the keyberon-one-key-keyboard, but is using `picoprobe` for logging and debugging.
+//! This example is a port of the keyberon-one-key-keyboard,
+//! but is using `picoprobe` for logging and debugging.
 //! It also handles interrupts differently, using software interrupts.
+
 #![no_std]
 #![no_main]
 
